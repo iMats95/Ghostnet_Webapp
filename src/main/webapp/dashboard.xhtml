@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Dashboard</title>
+    
+</h:head>
+<h:body>
+    <h:form id="dashboardForm">
+        <h1>Dashboard</h1>
+
+        <!-- Filter nach Status -->
+        <p:outputLabel for="statusFilter" value="Status filtern:" />
+        <p:selectOneMenu id="statusFilter" value="#{dashboardVerwalten.statusFilter}" style="width:200px;">
+    		<f:selectItem itemLabel="Alle" itemValue="#{null}" noSelectionOption="true"/>
+    		<f:selectItems value="#{dashboardVerwalten.statusListe}" var="status"
+                   		itemLabel="#{status}" itemValue="#{status}" />
+    		<p:ajax event="change" listener="#{dashboardVerwalten.filterGeisternetze}" update="netzTabelle" />
+		</p:selectOneMenu>
+
+        <!-- Tabelle mit Netzen -->
+        <p:dataTable id="netzTabelle" var="netz" value="#{dashboardVerwalten.gefilterteNetze}" lazy="false" paginator="true" rows="10"
+                     style="width:100%; margin-top:1em;" rowKey="#{netz.id}">
+
+            <p:column headerText="ID">
+                <h:outputText value="#{netz.id}" />
+            </p:column>
+
+            <p:column headerText="Breitengrad">
+                <h:outputText value="#{netz.breitengrad}" />
+            </p:column>
+
+            <p:column headerText="Längengrad">
+                <h:outputText value="#{netz.laengengrad}" />
+            </p:column>
+
+            <p:column headerText="Größe (m²)">
+                <h:outputText value="#{netz.groesse}" />
+            </p:column>
+
+            <p:column headerText="Status">
+                <h:outputText value="#{netz.status}" />
+            </p:column>
+
+            <p:column headerText="Melder Name">
+                <h:outputText value="#{netz.melder.name}" />
+            </p:column>
+
+            <p:column headerText="Melder Telefon">
+                <h:outputText value="#{netz.melder.telefonnr}" />
+            </p:column>
+
+            <p:column headerText="Berger Name">
+                <h:outputText value="#{netz.berger != null ? netz.berger.name : '—'}" />
+            </p:column>
+
+            <p:column headerText="Berger Telefon">
+                <h:outputText value="#{netz.berger != null ? netz.berger.telefonnr : '—'}" />
+            </p:column>
+
+            <!-- Button zum Berger übernehmen -->
+            <p:column headerText="Bergung übernehmen">
+                <h:panelGroup>
+                    <p:commandButton value="Übernehmen"
+                 		rendered="#{netz.status eq 'GEMELDET'}"
+                 		action="#{dashboardVerwalten.bergungUebernehmen(netz)}"
+                 		process="@this"
+                 		update="dashboardForm:netzTabelle"
+                 		oncomplete="PF('netzTabelle').clearFilters()" />
+                    <h:outputText rendered="#{netz.berger != null}" />
+               	</h:panelGroup>
+            </p:column>
+
+            <!-- Status nur änderbar vom Berger -->
+            <p:column headerText="Status ändern">
+    			<div style="position: relative; display: inline-block;">
+        			<p:selectOneMenu value="#{dashboardVerwalten.neuerStatus}" 
+                         			style="width:150px; opacity:0;"
+                         			styleClass="statusDropdown"
+                         			panelStyleClass="statusDropdownPanel"
+                         			disabled="#{netz.berger == null or netz.berger.id ne personBean.id}">
+            			<f:selectItems value="#{dashboardVerwalten.statusListe}" var="status"
+                           			itemLabel="#{status}" itemValue="#{status}" />
+            			<p:ajax event="change"
+                    			listener="#{dashboardVerwalten.statusAendern(netz)}"
+                    			process="@this"
+                    			update="@form"/>
+        			</p:selectOneMenu>
+        			<span class="dropdown-label-overlay"
+              			style="position: absolute; left: 10px; top: 8px; pointer-events: none; color: #333;">
+            			Status ändern
+        			</span>
+    			</div>
+			</p:column>
+        </p:dataTable>
+        <div style="margin-top: 1rem; text-align: center;">
+    		<p:button value="Zurück zur Startseite" outcome="index" icon="pi pi-home" />
+		</div>
+    </h:form>
+</h:body>
+</html>

@@ -1,0 +1,15 @@
+.label-disabled {
+    color: #888888 !important;
+}
+
+.statusDropdown .ui-selectonemenu-label {
+    color: transparent !important;
+}
+.dropdown-label-overlay {
+    font-size: 1em;
+    font-weight: normal;
+    left: 12px;
+    top: 7px;
+    pointer-events: none;
+    color: #333;
+}

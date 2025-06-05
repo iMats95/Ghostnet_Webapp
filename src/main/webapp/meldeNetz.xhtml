@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+<h:head>
+    <title>Neues Netz melden</title>
+    <h:outputStylesheet library="css" name="styles.css" />
+</h:head>
+
+<h:body>
+    <h:form id="meldeForm" style="max-width: 400px; margin: auto;">
+    	<p:growl id="growl" showDetail="true" life="5000" />
+        <h2>Neues Netz melden</h2>
+
+        <!-- ToggleSwitch -->
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <p:outputLabel for="anonym" value="Anonym melden?" />
+            <p:toggleSwitch id="anonym" value="#{meldeNetz.anonym}">
+                <p:ajax update="nameInput telefonInput" />
+            </p:toggleSwitch>
+        </div>
+
+        <!-- Name -->
+		<p:outputLabel for="nameInput" value="Name" />
+		<p:inputText id="nameInput"
+             		value="#{personBean.name}"
+             		disabled="#{meldeNetz.anonym}"
+             		required="#{!meldeNetz.anonym}"
+             		style="width: 100%;" />
+
+		<!-- Telefonnummer -->
+		<p:outputLabel for="telefonInput" value="Telefonnummer" />
+		<p:inputText id="telefonInput"
+             	value="#{personBean.telefonnr}"
+             	disabled="#{meldeNetz.anonym}"
+             	required="#{!meldeNetz.anonym}"
+             	style="width: 100%;">
+    		<f:validateLength minimum="8" />
+		</p:inputText>
+
+
+        <!-- Breitengrad -->
+        <p:outputLabel for="breitengrad" value="Breitengrad" />
+        <p:inputText id="breitengrad" value="#{geisternetzBean.breitengrad}" required="true" style="width: 100%;" />
+
+        <!-- Längengrad -->
+        <p:outputLabel for="laengengrad" value="Längengrad" />
+        <p:inputText id="laengengrad" value="#{geisternetzBean.laengengrad}" required="true" style="width: 100%;" />
+
+        <!-- Größe -->
+        <p:outputLabel for="groesse" value="Geschätzte Größe (in m²)" />
+        <p:inputText id="groesse" value="#{geisternetzBean.groesse}" required="true" style="width: 100%;" />
+
+        <!-- Absenden Button -->
+        <p:commandButton value="Netz melden"
+                 action="#{meldeNetz.absenden}"
+                 update="meldeForm growl"
+                 style="width: 100%;" />
+
+        <!-- Zurück zur Startseite -->
+        <div style="margin-top: 1rem; text-align: center;">
+            <p:button value="Zurück zur Startseite" outcome="index" icon="pi pi-home" />
+        </div>
+    </h:form>
+</h:body>
+</html>

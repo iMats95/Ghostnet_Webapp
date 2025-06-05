@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+    <title>Netze bergen</title>
+</h:head>
+<h:body>
+
+<h:form id="meldeForm" style="max-width: 400px; margin: auto;">
+    <h2>Name und Telefonnummer eingeben zum Bergen von Netzen</h2>
+
+    <div style="display: grid; grid-template-columns: 1fr; row-gap: 1rem;">
+    	<p:outputLabel for="nameInput" value="Name" />
+        <p:inputText id="nameInput" value="#{personBean.name}" required="true" style="width: 100%;" />
+        
+        <p:outputLabel for="telefonnrInput" value="Telefonnummer"/>        
+        <p:inputText id="telefonnrInput" value="#{personBean.telefonnr}" required="true" style="width: 100%;" >
+        	<f:validateLength minimum="8"/>
+        </p:inputText>        
+        
+        <div style="display: flex; gap: 1rem;">
+            <p:commandButton value="Anmelden" action="#{login.anmelden}" style="flex: 1;" />
+        </div>
+        
+        <div style="margin-top: 1rem; text-align: center;">
+    		<p:button value="Zurück zur Startseite" outcome="index" icon="pi pi-home" />
+		</div>
+    </div>
+</h:form>
+
+</h:body>
+</html>
